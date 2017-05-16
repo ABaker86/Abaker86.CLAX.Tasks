@@ -1,0 +1,44 @@
+﻿@model Abaker86.CLAX.Tasks.Models.TaskListViewModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Your Lists</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => Model.TASK_LIST_MAPPING_ID)
+    @Html.HiddenFor(model => Model.USER_ID)
+<p>
+    <input type="submit" formaction="TaskLists/Create" value="Add List" class="btn btn-default" />
+</p>
+
+    <div class="container">
+        <div class="row" id="lists">
+            @if(Model.TASK_LISTS != null) { 
+
+                for (int i = 0; i < Model.TASK_LISTS.Count; i++){
+
+                    @Html.HiddenFor(model => Model.TASK_LISTS[i].TASK_LIST_ID)
+
+                    <div class="col-md-4">
+                        <div class="user-list">
+                            <div class="list-header text-center">@Html.Label(Model.TASK_LISTS[i].LIST_NAME)</div>
+                            <div class="list-body" align="center">
+
+                                @Html.ActionLink("Edit", "Edit", new { id = Model.TASK_LISTS[i].TASK_LIST_ID }, new {@class = "btn btn-default" })
+
+                                @Html.Raw("<input type=\"submit\" formaction=\"TaskLists/Delete/"+ Model.TASK_LISTS[i].TASK_LIST_ID + "\" value=\"Delete\" class=\"btn btn-default\" />")
+
+                            </div>
+                            <div class="list-footer"></div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+    
+}

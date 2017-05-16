@@ -1,0 +1,81 @@
+﻿@model Abaker86.CLAX.Tasks.Models.TaskList
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+
+    
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.TASK_LIST_MAPPING_ID)
+        @Html.HiddenFor(model => model.TASK_LIST_ID)
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 col-md-offset-4">
+                    <div class="form-horizontal">
+
+                        <div class="form-group">
+
+                            @Html.EditorFor(model => model.LIST_NAME, new { htmlAttributes = new { @class = "form-control text-center" } })
+                            @Html.ValidationMessageFor(model => model.LIST_NAME, "", new { @class = "text-danger" })
+
+                            <hr />
+
+                            <input id="btnCreateItem" class="pull-right btn btn-default" type="submit" formaction="/TaskLists/CreateListItem" value="+" />
+                            
+                            @if (Model.TASK_ITEMS != null)
+                            {
+                                <ul style="list-style-type: none;">
+
+                                    @for (int i = 0; i < Model.TASK_ITEMS.Count; i++)
+                                    {
+                                        <li>
+                                            @Html.HiddenFor(model => model.TASK_ITEMS[i].TASK_ITEM_ID)
+                                            @Html.HiddenFor(model => model.TASK_ITEMS[i].TASK_LIST_ID)
+
+                                            @Html.CheckBoxFor(model => model.TASK_ITEMS[i].IS_COMPLETE)
+                                            @Html.EditorFor(model => model.TASK_ITEMS[i].ITEM_DESC)
+
+                                            @Html.Raw("<input type=\"submit\" formaction=\"/TaskLists/DeleteListItem/" + Model.TASK_ITEMS[i].TASK_ITEM_ID + "\" value=\"Delete\" class=\"btn btn-default\" />")
+
+                                        </li>
+                                    }
+
+                                </ul>
+                            }
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-4 col-md-4" align="center">
+                        <input id="btnSave" type="submit" value="Save" formaction="/TaskLists/Edit" class="btn btn-default" />
+                    </div>
+                </div>
+               
+                <div class="form-group">
+                    <div class="col-md-offset-4 col-md-4" align="center">
+                        <hr />
+                        @Html.ActionLink("Back to List", "Index")
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
